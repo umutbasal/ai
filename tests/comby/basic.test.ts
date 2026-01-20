@@ -37,7 +37,8 @@ describe("Comby Installation", () => {
 describe("Basic Matching and Rewriting", () => {
   test("rename function - preview mode", async () => {
     const testFile = setupTestFile("go/sample.go");
-    const result = await $`comby 'oldFunc(:[args])' 'newFunc(:[args])' ${testFile}`.text();
+    const result =
+      await $`comby 'oldFunc(:[args])' 'newFunc(:[args])' ${testFile}`.text();
     expect(result).toContain("newFunc");
   });
 
@@ -59,7 +60,8 @@ describe("Basic Matching and Rewriting", () => {
 
   test("diff output", async () => {
     const testFile = setupTestFile("go/sample.go");
-    const result = await $`comby 'oldFunc(:[args])' 'newFunc(:[args])' ${testFile} -diff`.text();
+    const result =
+      await $`comby 'oldFunc(:[args])' 'newFunc(:[args])' ${testFile} -diff`.text();
     expect(result).toContain("-");
     expect(result).toContain("+");
     expect(result).toContain("oldFunc");
@@ -72,7 +74,9 @@ describe("Match Holes", () => {
     const testFile = setupTestFile("js/sample.js");
     await $`comby 'fetch(:[url])' 'fetch(:[url], { timeout: 5000 })' ${testFile} -i`.quiet();
     const content = readTestFile(testFile);
-    expect(content).toContain('fetch("https://api.example.com", { timeout: 5000 })');
+    expect(content).toContain(
+      'fetch("https://api.example.com", { timeout: 5000 })',
+    );
   });
 
   test(":[[hole]] - matches identifiers only", async () => {
@@ -89,24 +93,28 @@ describe("Match Holes", () => {
   });
 
   test(":[hole:e] - single expression with stdin", async () => {
-    const result = await $`echo 'func(a, b)' | comby 'func(:[arg:e], ...)' 'found' .py -stdin -stdout`.text();
+    const result =
+      await $`echo 'func(a, b)' | comby 'func(:[arg:e], ...)' 'found' .py -stdin -stdout`.text();
     expect(result.trim()).toBe("found");
   });
 });
 
 describe("Stdin/Stdout", () => {
   test("pipe input and output", async () => {
-    const result = await $`echo 'oldFunc(test)' | comby 'oldFunc(:[args])' 'newFunc(:[args])' -stdin -stdout`.text();
+    const result =
+      await $`echo 'oldFunc(test)' | comby 'oldFunc(:[args])' 'newFunc(:[args])' -stdin -stdout`.text();
     expect(result).toContain("newFunc(test)");
   });
 
   test("match-only with stdin", async () => {
-    const result = await $`echo 'printf("hello")' | comby 'printf(:[args])' '' .c -stdin -match-only`.text();
+    const result =
+      await $`echo 'printf("hello")' | comby 'printf(:[args])' '' .c -stdin -match-only`.text();
     expect(result).toContain('printf("hello")');
   });
 
   test("json output with stdin", async () => {
-    const result = await $`echo 'printf("hello")' | comby 'printf(:[args])' '' .c -stdin -match-only -json-lines`.text();
+    const result =
+      await $`echo 'printf("hello")' | comby 'printf(:[args])' '' .c -stdin -match-only -json-lines`.text();
     const json = JSON.parse(result);
     expect(json.matches).toBeDefined();
     expect(json.matches.length).toBeGreaterThan(0);
@@ -117,38 +125,43 @@ describe("Stdin/Stdout", () => {
 describe("Language Detection", () => {
   test("JavaScript detection by extension", async () => {
     const testFile = setupTestFile("js/sample.js");
-    const result = await $`comby 'function :[name](:[args])' '' ${testFile} -match-only`.text();
+    const result =
+      await $`comby 'function :[name](:[args])' '' ${testFile} -match-only`.text();
     expect(result).toContain("function");
   });
 
   test("Python detection by extension", async () => {
     const testFile = setupTestFile("py/sample.py");
-    const result = await $`comby 'def :[name](:[args]):' '' ${testFile} -match-only`.text();
+    const result =
+      await $`comby 'def :[name](:[args]):' '' ${testFile} -match-only`.text();
     expect(result).toContain("def ");
   });
 
   test("Go detection by extension", async () => {
     const testFile = setupTestFile("go/sample.go");
-    const result = await $`comby 'func :[name](:[args])' '' ${testFile} -match-only`.text();
+    const result =
+      await $`comby 'func :[name](:[args])' '' ${testFile} -match-only`.text();
     expect(result).toContain("func");
   });
 
   test("Force matcher", async () => {
     const testFile = setupTestFile("js/sample.js");
-    const result = await $`comby 'console.log(:[args])' '' -matcher .js ${testFile} -match-only`.text();
+    const result =
+      await $`comby 'console.log(:[args])' '' -matcher .js ${testFile} -match-only`.text();
     expect(result).toContain("console.log");
   });
 });
 
 describe("JSON Output", () => {
   test("json-lines output structure", async () => {
-    const result = await $`echo 'func(a, b)' | comby 'func(:[args])' '' .c -stdin -match-only -json-lines`.text();
+    const result =
+      await $`echo 'func(a, b)' | comby 'func(:[args])' '' .c -stdin -match-only -json-lines`.text();
     const json = JSON.parse(result);
-    
+
     expect(json.uri).toBeDefined();
     expect(json.matches).toBeDefined();
     expect(Array.isArray(json.matches)).toBe(true);
-    
+
     const match = json.matches[0];
     expect(match.matched).toBeDefined();
     expect(match.range).toBeDefined();
@@ -156,9 +169,10 @@ describe("JSON Output", () => {
   });
 
   test("json output captures holes", async () => {
-    const result = await $`echo 'oldFunc(test)' | comby 'oldFunc(:[args])' '' .c -stdin -match-only -json-lines`.text();
+    const result =
+      await $`echo 'oldFunc(test)' | comby 'oldFunc(:[args])' '' .c -stdin -match-only -json-lines`.text();
     const json = JSON.parse(result);
-    
+
     const env = json.matches[0].environment;
     expect(env.length).toBeGreaterThan(0);
     expect(env[0].variable).toBe("args");

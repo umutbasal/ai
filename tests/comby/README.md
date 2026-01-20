@@ -22,10 +22,11 @@ tests/comby/
 ## Prerequisites
 
 1. **Install comby**:
+
    ```bash
    # macOS
    brew install comby
-   
+
    # Linux/WSL
    bash <(curl -sL get-comby.netlify.app)
    ```
@@ -60,6 +61,7 @@ bun test --verbose
 ## Test Coverage
 
 ### basic.test.ts
+
 - ✓ Installation verification
 - ✓ Basic matching and rewriting
 - ✓ Match holes (:[hole], :[[hole]], ..., :[hole:e])
@@ -69,6 +71,7 @@ bun test --verbose
 - ✓ Diff generation
 
 ### properties.test.ts
+
 - ✓ Case transformers (.Capitalize, .UPPERCASE, .lowercase, .uncapitalize)
 - ✓ Case converters (.UpperCamelCase, .lowerCamelCase, .UPPER_SNAKE_CASE, .lower_snake_case)
 - ✓ Size properties (.length, .lines)
@@ -77,6 +80,7 @@ bun test --verbose
 - ✓ Property combinations
 
 ### rules.test.ts
+
 - ✓ Equality rules (==, !=)
 - ✓ Literal comparison
 - ✓ Pattern matching rules
@@ -84,6 +88,7 @@ bun test --verbose
 - ✓ Duplicate detection
 
 ### patterns.test.ts
+
 - ✓ Function refactoring (rename, swap args, add params)
 - ✓ API migration (deprecated → new)
 - ✓ Code cleanup (remove console.log, dbg!, print)
@@ -96,6 +101,7 @@ bun test --verbose
 ## Test Data
 
 The `testdata/` directory contains sample code files in multiple languages:
+
 - **JavaScript**: Function calls, console.log, API calls, naming patterns
 - **Python**: Imports, print statements, dict operations, test functions
 - **Go**: Functions, method calls, type declarations
@@ -138,8 +144,8 @@ bun test --watch
 2. Create test in appropriate test file
 3. Use helper functions:
    ```typescript
-   setupTestFile("js/sample.js")  // Copy to temp
-   readTestFile(testFile)          // Read content
+   setupTestFile("js/sample.js"); // Copy to temp
+   readTestFile(testFile); // Read content
    ```
 4. Clean up is automatic (beforeEach hook)
 

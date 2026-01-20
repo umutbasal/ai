@@ -1,6 +1,12 @@
 import { describe, test, expect, beforeEach } from "bun:test";
 import { $ } from "bun";
-import { mkdirSync, copyFileSync, rmSync, readFileSync, writeFileSync } from "fs";
+import {
+  mkdirSync,
+  copyFileSync,
+  rmSync,
+  readFileSync,
+  writeFileSync,
+} from "fs";
 import { join } from "path";
 
 const TEST_DIR = join(import.meta.dir, "temp");
@@ -32,7 +38,8 @@ describe("Function Refactoring", () => {
   });
 
   test("swap function arguments", async () => {
-    const result = await $`echo 'swap(a, b)' | comby 'swap(:[a], :[b])' 'swap(:[b], :[a])' .go -stdin -stdout`.text();
+    const result =
+      await $`echo 'swap(a, b)' | comby 'swap(:[a], :[b])' 'swap(:[b], :[a])' .go -stdin -stdout`.text();
     expect(result.trim()).toBe("swap(b, a)");
   });
 
@@ -61,7 +68,8 @@ describe("API Migration", () => {
   });
 
   test("method chaining change", async () => {
-    const result = await $`echo 'obj.old(x).chain(y)' | comby ':[obj].old(:[x]).chain(:[y])' ':[obj].new(:[x], :[y])' .js -stdin -stdout`.text();
+    const result =
+      await $`echo 'obj.old(x).chain(y)' | comby ':[obj].old(:[x]).chain(:[y])' ':[obj].new(:[x], :[y])' .js -stdin -stdout`.text();
     expect(result.trim()).toBe("obj.new(x, y)");
   });
 
@@ -122,12 +130,14 @@ describe("Naming Conventions", () => {
   });
 
   test("camelCase to snake_case", async () => {
-    const result = await $`echo 'myVariable' | comby ':[[var]]' ':[var].lower_snake_case' .py -stdin -stdout`.text();
+    const result =
+      await $`echo 'myVariable' | comby ':[[var]]' ':[var].lower_snake_case' .py -stdin -stdout`.text();
     expect(result.trim()).toBe("my_variable");
   });
 
   test("convert to CONSTANT_CASE", async () => {
-    const result = await $`echo 'const myConst = 42' | comby 'const :[[name]] = :[val]' 'const :[name].UPPER_SNAKE_CASE = :[val]' .js -stdin`.text();
+    const result =
+      await $`echo 'const myConst = 42' | comby 'const :[[name]] = :[val]' 'const :[name].UPPER_SNAKE_CASE = :[val]' .js -stdin`.text();
     expect(result).toContain("MY_CONST");
   });
 });
@@ -161,24 +171,28 @@ describe("Field/Property Rename", () => {
 
 describe("Unwrap Operations", () => {
   test("unwrap Some", async () => {
-    const result = await $`echo 'Some(42)' | comby 'Some(:[x])' ':[x]' .rs -stdin -stdout`.text();
+    const result =
+      await $`echo 'Some(42)' | comby 'Some(:[x])' ':[x]' .rs -stdin -stdout`.text();
     expect(result.trim()).toBe("42");
   });
 
   test("unwrap Ok", async () => {
-    const result = await $`echo 'Ok("test")' | comby 'Ok(:[x])' ':[x]' .rs -stdin -stdout`.text();
+    const result =
+      await $`echo 'Ok("test")' | comby 'Ok(:[x])' ':[x]' .rs -stdin -stdout`.text();
     expect(result.trim()).toBe('"test"');
   });
 });
 
 describe("Balanced Delimiters", () => {
   test("match nested function calls", async () => {
-    const result = await $`echo 'log(format("hello %s", name))' | comby 'log(:[msg])' '' .py -stdin -match-only`.text();
+    const result =
+      await $`echo 'log(format("hello %s", name))' | comby 'log(:[msg])' '' .py -stdin -match-only`.text();
     expect(result).toContain('format("hello %s", name)');
   });
 
   test("match nested parentheses", async () => {
-    const result = await $`echo 'func(foo(x), bar(y))' | comby 'func(:[args])' '' .c -stdin -match-only`.text();
+    const result =
+      await $`echo 'func(foo(x), bar(y))' | comby 'func(:[args])' '' .c -stdin -match-only`.text();
     expect(result).toContain("func(foo(x), bar(y))");
   });
 });
@@ -187,7 +201,7 @@ describe("Configuration Files", () => {
   test("use config file for multiple patterns", async () => {
     const testFile = setupTestFile("js/sample.js");
     const configPath = join(TEST_DIR, "comby.toml");
-    
+
     const config = `
 [rename-function]
 match = "oldFunc(:[args])"
@@ -197,13 +211,13 @@ rewrite = "newFunc(:[args])"
 match = "console.log(:[args])"
 rewrite = ""
 `;
-    
+
     writeFileSync(configPath, config);
-    
+
     // Config files need the file extension and directory
     await $`comby -config ${configPath} -f .js -d ${TEST_DIR} -i`.quiet();
     const content = readTestFile(testFile);
-    
+
     expect(content).toContain("newFunc");
     expect(content).not.toContain("console.log");
   });

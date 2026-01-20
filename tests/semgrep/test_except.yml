@@ -1,0 +1,11 @@
+rules:
+  - id: empty-except
+    languages:
+      - python
+    message: Empty except block
+    pattern: |
+      try:
+        ...
+      except:
+        pass
+    severity: WARNING

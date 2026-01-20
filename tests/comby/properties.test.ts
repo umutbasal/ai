@@ -24,29 +24,34 @@ beforeEach(() => {
 
 describe("Case Transformers", () => {
   test(".Capitalize - first char uppercase", async () => {
-    const result = await $`echo 'hello' | comby ':[x]' ':[x].Capitalize' -stdin -stdout`.text();
+    const result =
+      await $`echo 'hello' | comby ':[x]' ':[x].Capitalize' -stdin -stdout`.text();
     expect(result.trim()).toBe("Hello");
   });
 
   test(".UPPERCASE - all uppercase", async () => {
-    const result = await $`echo 'hello' | comby ':[x]' ':[x].UPPERCASE' -stdin -stdout`.text();
+    const result =
+      await $`echo 'hello' | comby ':[x]' ':[x].UPPERCASE' -stdin -stdout`.text();
     expect(result.trim()).toBe("HELLO");
   });
 
   test(".lowercase - all lowercase", async () => {
-    const result = await $`echo 'HELLO' | comby ':[x]' ':[x].lowercase' -stdin -stdout`.text();
+    const result =
+      await $`echo 'HELLO' | comby ':[x]' ':[x].lowercase' -stdin -stdout`.text();
     expect(result.trim()).toBe("hello");
   });
 
   test(".uncapitalize - first char lowercase", async () => {
-    const result = await $`echo 'Hello' | comby ':[x]' ':[x].uncapitalize' -stdin -stdout`.text();
+    const result =
+      await $`echo 'Hello' | comby ':[x]' ':[x].uncapitalize' -stdin -stdout`.text();
     expect(result.trim()).toBe("hello");
   });
 });
 
 describe("Case Convention Converters", () => {
   test(".UpperCamelCase - snake to UpperCamel", async () => {
-    const result = await $`echo 'my_function' | comby ':[[fn]]' ':[fn].UpperCamelCase' -stdin -stdout`.text();
+    const result =
+      await $`echo 'my_function' | comby ':[[fn]]' ':[fn].UpperCamelCase' -stdin -stdout`.text();
     expect(result.trim()).toBe("MyFunction");
   });
 
@@ -58,12 +63,14 @@ describe("Case Convention Converters", () => {
   });
 
   test(".UPPER_SNAKE_CASE - camel to UPPER_SNAKE", async () => {
-    const result = await $`echo 'myFunction' | comby ':[[fn]]' ':[fn].UPPER_SNAKE_CASE' -stdin -stdout`.text();
+    const result =
+      await $`echo 'myFunction' | comby ':[[fn]]' ':[fn].UPPER_SNAKE_CASE' -stdin -stdout`.text();
     expect(result.trim()).toBe("MY_FUNCTION");
   });
 
   test(".lower_snake_case - camel to lower_snake", async () => {
-    const result = await $`echo 'myFunction' | comby ':[[fn]]' ':[fn].lower_snake_case' -stdin -stdout`.text();
+    const result =
+      await $`echo 'myFunction' | comby ':[[fn]]' ':[fn].lower_snake_case' -stdin -stdout`.text();
     expect(result.trim()).toBe("my_function");
   });
 });
@@ -78,33 +85,38 @@ describe("Size Properties", () => {
   });
 
   test(".length works with matched content", async () => {
-    const result = await $`echo 'hello' | comby ':[word]' 'word_:[word].length' -stdin -stdout`.text();
+    const result =
+      await $`echo 'hello' | comby ':[word]' 'word_:[word].length' -stdin -stdout`.text();
     expect(result).toContain("word_");
   });
 });
 
 describe("Identity Property", () => {
   test(".value in rewrite template", async () => {
-    const result = await $`echo 'word' | comby 'word' 'result' -stdin -stdout`.text();
+    const result =
+      await $`echo 'word' | comby 'word' 'result' -stdin -stdout`.text();
     expect(result.trim()).toBe("result");
   });
 
   test("matched values are substituted", async () => {
-    const result = await $`echo 'test123' | comby ':[[x]]' 'matched_:[x]' -stdin -stdout`.text();
+    const result =
+      await $`echo 'test123' | comby ':[[x]]' 'matched_:[x]' -stdin -stdout`.text();
     expect(result.trim()).toBe("matched_test123");
   });
 });
 
 describe("Fresh Identifiers", () => {
   test(":[id()] generates unique identifier", async () => {
-    const result = await $`echo 'x + y' | comby ':[a] + :[b]' 'let :[id()] = :[a]; :[id()] + :[b]' .js -stdin`.text();
+    const result =
+      await $`echo 'x + y' | comby ':[a] + :[b]' 'let :[id()] = :[a]; :[id()] + :[b]' .js -stdin`.text();
     expect(result).toContain("let ");
     expect(result).toContain(" = x");
   });
 
   test(":[id(label)] generates consistent identifier", async () => {
-    const result = await $`echo 'foo() + foo()' | comby ':[expr] + :[expr]' 'let :[id(tmp)] = :[expr]; :[id(tmp)] + :[id(tmp)]' .js -stdin`.text();
-    
+    const result =
+      await $`echo 'foo() + foo()' | comby ':[expr] + :[expr]' 'let :[id(tmp)] = :[expr]; :[id(tmp)] + :[id(tmp)]' .js -stdin`.text();
+
     const tmpMatches = result.match(/tmp_\d+/g);
     expect(tmpMatches).toBeDefined();
     if (tmpMatches && tmpMatches.length > 1) {
@@ -115,7 +127,8 @@ describe("Fresh Identifiers", () => {
 
 describe("Property Combinations", () => {
   test("single case transformer works", async () => {
-    const result = await $`echo 'my_var' | comby ':[[v]]' ':[v].lowerCamelCase' -stdin -stdout`.text();
+    const result =
+      await $`echo 'my_var' | comby ':[[v]]' ':[v].lowerCamelCase' -stdin -stdout`.text();
     expect(result.trim()).toBe("myVar");
     // Note: Property chaining (.lowerCamelCase.Capitalize) has limited support
   });

@@ -1,6 +1,6 @@
 // Test file for JavaScript refactoring
 function oldFunc(a, b) {
-    return a + b;
+  return a + b;
 }
 
 oldFunc(1, 2);
