@@ -1,4 +1,4 @@
-# AI Code Analysis Skills
+# AI Skills
 
 A collection of AI skills
 
