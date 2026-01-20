@@ -170,8 +170,8 @@ comby 'def :[name](:[args]) -> :[type]:' 'def :[name](:[args]):' .py -i
 # Rename struct field
 comby ':[obj].old_field' ':[obj].new_field' .rs -i
 
-# Update dict key
-comby 'data["old_key"]' 'data["new_key"]' .py -i
+# Update dict key (use variable hole to match both data and result)
+comby ':[var]["old_key"]' ':[var]["new_key"]' .py -i
 ```
 
 ### Change Data Structure
@@ -318,3 +318,6 @@ comby 'def :[name](:[args]) -> Any:' 'def :[name](:[args]) -> :[specific_type]:'
 5. **Use -review**: Interactive mode for careful refactoring
 6. **Check diffs**: Use `-diff` to generate reviewable patches
 7. **Run tests**: Validate after each refactoring step
+8. **Stdin/stdout**: Use `-stdout` with `-stdin` for plain output
+9. **String literals**: Include quotes in patterns when matching string literals
+10. **Matcher names**: Use correct names from `comby -list` (e.g., `.js` not `.javascript`)

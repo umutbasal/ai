@@ -42,6 +42,20 @@ comby 'oldFunc(:[args])' 'newFunc(:[args])' .go -review
 
 ## Core Concepts
 
+### Stdin/Stdout Usage
+
+When using `-stdin` for input, add `-stdout` for plain rewritten output:
+
+```bash
+# With -stdout flag for plain output
+echo 'hello' | comby ':[x]' ':[x].Capitalize' -stdin -stdout
+# Output: Hello
+
+# Without -stdout: outputs colored diff format (default)
+echo 'hello' | comby ':[x]' ':[x].Capitalize' -stdin
+# Output: (colored diff)
+```
+
 ### Match Holes
 
 Holes capture varying parts of code:
@@ -78,12 +92,12 @@ Add conditions with `-rule`:
 # Only match when equal
 comby 'if (:[x] == :[y])' '' -rule 'where :[x] == :[y]' .c -match-only
 
-# Only match specific values
-comby 'log(:[level], :[msg])' 'logger(:[level], :[msg])' \
+# Only match specific values (pattern includes quotes to match string literals)
+comby 'log(":[level]", ":[msg]")' 'logger(":[level]", ":[msg]")' \
   -rule 'where :[level] == "ERROR"' .py -i
 
-# Pattern matching
-comby 'func(:[arg])' 'newfunc(:[arg])' \
+# Pattern matching (pattern includes quotes to match string literals)
+comby 'func(":[arg]")' 'newfunc(":[arg]")' \
   -rule 'where match :[arg] { | "error" -> true }' .go -i
 ```
 
@@ -155,7 +169,7 @@ comby ':[[var]]' ':[var].lower_snake_case' .py -i
 
 ```bash
 comby ':[obj].oldField' ':[obj].newField' .ts -i
-comby 'data["old_key"]' 'data["new_key"]' .py -i
+comby ':[var]["old_key"]' ':[var]["new_key"]' .py -i
 ```
 
 **See [references/examples.md](references/examples.md) for comprehensive refactoring examples.**
@@ -179,7 +193,7 @@ rewrite = "from new_module import :[name]"
 rule = "where :[name] != 'excluded'"
 ```
 
-Run: `comby -config comby.toml -f .js -i`
+Run: `comby -config comby.toml -f .js -d directory/ -i`
 
 ## Language Support
 
@@ -190,7 +204,7 @@ Auto-detects by extension:
 - **Markup**: HTML, XML, JSON, YAML
 - **Other**: SQL, Bash, LaTeX
 
-Force language: `-matcher .rust` or use `-matcher .generic` for unsupported languages.
+Force language: `-matcher .rs` (use correct names from `comby -list`) or use `-matcher .generic` for unsupported languages.
 
 ## Best Practices
 

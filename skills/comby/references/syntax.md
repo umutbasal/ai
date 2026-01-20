@@ -198,6 +198,22 @@ Use `-matcher .generic` for unsupported languages or when language detection fai
 comby 'pattern' 'replacement' -matcher .generic file.unknown
 ```
 
+## Stdin/Stdout Behavior
+
+When using stdin, control output format:
+
+```bash
+# Plain rewritten output (use -stdout)
+echo 'test' | comby ':[x]' ':[x].Capitalize' -stdin -stdout
+# Output: Test
+
+# Diff format (default without -stdout)
+echo 'test' | comby ':[x]' ':[x].Capitalize' -stdin
+# Output: colored diff showing changes
+```
+
+**Important**: Always use `-stdout` with `-stdin` when you want the rewritten text, not a diff.
+
 ## Tips
 
 1. **Start simple**: Test with basic patterns before adding complexity
@@ -205,4 +221,5 @@ comby 'pattern' 'replacement' -matcher .generic file.unknown
 3. **Test without `-i`**: Preview changes before applying
 4. **Escape regex**: In regex holes, escape `\` as `\\`
 5. **Whitespace flexible**: Patterns match regardless of spacing
-6. **Playground**: Test at https://comby.live
+6. **Use `-stdout` with `-stdin`**: Get plain output instead of diff
+7. **Playground**: Test at https://comby.live

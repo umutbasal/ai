@@ -1,0 +1,16 @@
+{
+  "name": "comby-skill-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive test suite for comby skill validation",
+  "scripts": {
+    "test": "bun test",
+    "test:basic": "bun test basic.test.ts",
+    "test:properties": "bun test properties.test.ts",
+    "test:rules": "bun test rules.test.ts",
+    "test:patterns": "bun test patterns.test.ts",
+    "test:watch": "bun test --watch"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
