@@ -6,9 +6,6 @@ function oldFunc(a, b) {
 oldFunc(1, 2);
 oldFunc(3, 4);
 
-/Users/umutbasal/next/umutbasal/ai/tests/comby/temp/sample.js;
-/Users/umutbasal/next/umutbasal/ai/tests/comby/temp/sample.js;
-
 fetch("https://api.example.com");
 fetch("https://api2.example.com");
 

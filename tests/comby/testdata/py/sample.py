@@ -5,8 +5,6 @@ def oldFunc(args):
 oldFunc("test")
 oldFunc("another")
 
-/Users/umutbasal/next/umutbasal/ai/tests/comby/temp/sample.py
-/Users/umutbasal/next/umutbasal/ai/tests/comby/temp/sample.py
 
 def func(a, b):
     return a + b
@@ -21,7 +19,6 @@ data["old_key"] = "value"
 result["old_key"] = "another"
 
 if x == x:
-    /Users/umutbasal/next/umutbasal/ai/tests/comby/temp/sample.py
 
 from old_module import something
 from old_module import another_thing
