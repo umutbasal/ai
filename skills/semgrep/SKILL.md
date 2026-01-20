@@ -7,6 +7,51 @@ description: Static analysis and security scanning using Semgrep, a fast, open-s
 
 Semgrep is a fast, open-source static analysis tool that finds bugs and enforces code standards using pattern matching. It supports multiple languages and can detect security vulnerabilities, code quality issues, and style violations.
 
+## Semgrep Registry
+
+The [Semgrep Registry](https://semgrep.dev/r) provides thousands of Community Edition and Pro rules maintained by Semgrep and the community. Rules are organized by:
+
+### Rule Categories
+
+- **Security**: Detects vulnerabilities like SQL injection, XSS, insecure deserialization, dangerous APIs, and insecure transport
+- **Best Practices**: Enforces coding standards, secure coding guidelines, and automated style reviews
+- **Correctness**: Identifies logic bugs and common programming errors
+- **Performance**: Addresses code efficiency and optimization issues
+
+### OWASP Coverage
+
+Semgrep provides comprehensive coverage for the [OWASP Top 10](https://semgrep.dev/solutions/owasp-top-ten) security risks:
+
+1. **A01:2021 - Broken Access Control**: Authorization bypass, privilege escalation
+2. **A02:2021 - Cryptographic Failures**: Weak encryption, insecure hashing
+3. **A03:2021 - Injection**: SQL injection, command injection, LDAP injection, XSS
+4. **A04:2021 - Insecure Design**: Missing security controls, threat modeling issues
+5. **A05:2021 - Security Misconfiguration**: Default credentials, verbose errors, insecure defaults
+6. **A06:2021 - Vulnerable Components**: Known CVEs in dependencies (via Semgrep Supply Chain)
+7. **A07:2021 - Authentication Failures**: Weak passwords, session management issues
+8. **A08:2021 - Data Integrity Failures**: Insecure deserialization, unsigned data
+9. **A09:2021 - Logging Failures**: Missing logging, sensitive data in logs
+10. **A10:2021 - SSRF**: Server-side request forgery
+
+### Rule Sources
+
+- **Pro Rules**: High-accuracy rules with crossfile and dataflow analysis (commercial)
+- **Community Rules**: Free rules in [semgrep/semgrep-rules](https://github.com/semgrep/semgrep-rules) repository
+- **Third-party Rules**: Contributed by security teams (Trail of Bits, etc.)
+
+### Pre-configured Rulesets
+
+- `p/ci`: High-confidence security and correctness bugs for CI/CD
+- `p/security-audit`: Comprehensive security scanning
+- `p/owasp-top-ten`: OWASP Top 10 coverage
+- `p/default`: General security and correctness rules
+- Language-specific: `p/python`, `p/javascript`, `p/java`, etc.
+- Framework-specific: `p/react`, `p/django`, `p/spring`, etc.
+
+### Supported Technologies
+
+30+ languages including Python, JavaScript, TypeScript, Java, Go, Ruby, PHP, C#, Kotlin, Swift, Rust, and more. Framework support includes React, Django, Flask, Spring, Express, Rails, Laravel, and many others.
+
 ## Installation Check
 
 Verify semgrep is installed:
@@ -17,29 +62,53 @@ which semgrep || echo "Install: pip install semgrep or brew install semgrep"
 
 ## Quick Start
 
+### Using Registry Rules
+
+```bash
+# Scan with auto-detection (recommended for CI/CD)
+semgrep --config auto .
+
+# Scan with specific ruleset
+semgrep --config "p/ci" .
+semgrep --config "p/security-audit" .
+semgrep --config "p/owasp-top-ten" .
+
+# Scan with language-specific rules
+semgrep --config "p/python" .
+semgrep --config "p/javascript" .
+
+# Scan with framework-specific rules
+semgrep --config "p/react" .
+semgrep --config "p/django" .
+
+# Combine multiple rulesets
+semgrep --config "p/ci" --config "p/security-audit" .
+```
+
 ### Basic Scan
 
 ```bash
-# Scan current directory
-semgrep --config auto .
-
 # Scan specific directory
 semgrep --config auto src/
 
-# Scan with specific rule
+# Scan with inline pattern
 semgrep -e 'pattern' --lang python .
 
 # Scan with custom rule file
 semgrep --config my-rules.yml .
+
+# Search Registry for specific rules
+# Visit https://semgrep.dev/r to browse available rules
 ```
 
 ### Common Workflow
 
-1. **Test pattern** - Use `-e` flag to test patterns interactively
-2. **Create rule** - Write YAML rule file for complex patterns
-3. **Run scan** - Execute with `--config` or `-e` flag
-4. **Review findings** - Check output for matches
+1. **Choose rules** - Select from Registry rulesets or write custom rules
+2. **Test pattern** - Use `-e` flag to test patterns interactively
+3. **Run scan** - Execute with `--config` for rulesets or `-e` for inline patterns
+4. **Review findings** - Check output, filtered by severity if needed
 5. **Apply autofix** - Use `--autofix` for automatic fixes (if available)
+6. **Integrate CI/CD** - Use `p/ci` ruleset for continuous scanning
 
 ## Core Concepts
 
@@ -234,13 +303,16 @@ rules:
 
 ## Best Practices
 
-1. **Start with registry**: Use `--config auto` to leverage Semgrep Registry rules
-2. **Test patterns**: Use `-e` flag to test patterns before creating rules
-3. **Use metavariables**: Capture patterns for reuse in messages and fixes
-4. **Combine patterns**: Use boolean operators for complex logic
-5. **Review findings**: Always review autofix suggestions before applying
-6. **Version control**: Commit rule files to version control
-7. **CI/CD integration**: Run Semgrep in CI/CD pipelines
+1. **Start with registry**: Use `--config "p/ci"` or `--config auto` for CI/CD
+2. **Layer security**: Combine `p/owasp-top-ten` with language-specific rulesets
+3. **Filter by severity**: Use `--severity ERROR` or `--severity HIGH` for critical issues
+4. **Use autofix in CI**: Enable `--autofix` for safe, automated fixes
+5. **Test patterns**: Use `-e` flag to test patterns before creating rules
+6. **Browse Registry**: Visit [semgrep.dev/r](https://semgrep.dev/r) to discover rules for your stack
+7. **Version control**: Commit custom rule files to version control
+8. **Monitor performance**: Use `--metrics=off` to disable telemetry in sandboxed environments
+9. **Incremental adoption**: Start with high-confidence rules (`p/ci`), then expand
+10. **Custom rules**: Write custom rules for organization-specific security requirements
 
 ## Resources
 

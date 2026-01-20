@@ -2,6 +2,52 @@
 
 Common security and code quality patterns for Semgrep.
 
+## Using Semgrep Registry
+
+The [Semgrep Registry](https://semgrep.dev/r) provides pre-built rulesets covering common security issues, OWASP Top 10, and best practices.
+
+### Quick Start with Registry
+
+```bash
+# Recommended for CI/CD - high-confidence rules
+semgrep --config "p/ci" .
+
+# Comprehensive security audit
+semgrep --config "p/security-audit" .
+
+# OWASP Top 10 coverage
+semgrep --config "p/owasp-top-ten" .
+
+# Language-specific rules
+semgrep --config "p/python" .
+semgrep --config "p/javascript" .
+semgrep --config "p/go" .
+semgrep --config "p/java" .
+
+# Framework-specific rules
+semgrep --config "p/django" .
+semgrep --config "p/flask" .
+semgrep --config "p/react" .
+semgrep --config "p/express" .
+semgrep --config "p/spring" .
+semgrep --config "p/rails" .
+
+# Combine multiple rulesets
+semgrep --config "p/ci" --config "p/owasp-top-ten" --config "p/django" .
+```
+
+### Registry Rule Categories
+
+- **Security**: XSS, SQL injection, CSRF, command injection, path traversal
+- **OWASP A01-A10**: Comprehensive OWASP Top 10 coverage
+- **Best Practices**: Code style, secure coding guidelines, framework best practices
+- **Correctness**: Logic bugs, type errors, common programming mistakes
+- **Performance**: Inefficient code patterns, N+1 queries, unnecessary loops
+
+## Custom Security Patterns
+
+Below are examples of custom patterns you can write for organization-specific requirements.
+
 ## Security Patterns
 
 ### SQL Injection
